@@ -4,12 +4,12 @@ const User = require('../models/user');
 
 exports.createUser = async (req, res) => {
   try {
-    const { name, email } = req.body;
-    const user = await User.create({ name, email });
+    const { name, email, password } = req.body;
+    const user = await User.create({ name, email, password });
     res.status(201).json(user);
   } catch (err) {
     res.status(500).json({ error: err.message });
-  }
+  }     
 };
 
 
@@ -25,11 +25,12 @@ exports.getUsers = async (req, res) => {
 
 exports.updateUser = async (req, res) => {
   try {
-    const { name, email } = req.body;
+    const { name, email, password } = req.body;
     const user = await User.findByPk(req.params.id);
     if (!user) return res.status(404).json({ error: 'User not found' });
     user.name = name;
     user.email = email;
+    user.password = password;
     await user.save();
     res.json(user);
   } catch (err) {
